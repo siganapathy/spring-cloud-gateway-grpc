@@ -4,7 +4,6 @@ import com.example.grpcserver.hello.HelloRequest;
 import com.example.grpcserver.hello.HelloResponse;
 import com.example.grpcserver.hello.HelloServiceGrpc;
 import io.grpc.ManagedChannel;
-import io.grpc.netty.shaded.io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -16,7 +15,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
 
-import static io.grpc.netty.shaded.io.grpc.netty.NegotiationType.TLS;
+import static io.grpc.netty.shaded.io.grpc.netty.NegotiationType.PLAINTEXT;
 
 @SpringBootApplication
 public class GrpcClientApplication implements ApplicationRunner {
@@ -32,8 +31,8 @@ public class GrpcClientApplication implements ApplicationRunner {
         ManagedChannel channel = createSecuredChannel(gatewayPort);
 
         final HelloResponse response = HelloServiceGrpc.newBlockingStub(channel)
-                .hello(HelloRequest.newBuilder().setFirstName("Saul")
-                        .setLastName("Hudson").build());
+                .hello(HelloRequest.newBuilder().setFirstName("Sivashankar")
+                        .setLastName("Ganapathy").build());
 
         System.out.println(response.toString());
     }
@@ -54,9 +53,8 @@ public class GrpcClientApplication implements ApplicationRunner {
                     }
                 }};
 
+
         return NettyChannelBuilder.forAddress("localhost", port)
-                .useTransportSecurity().sslContext(
-                        GrpcSslContexts.forClient().trustManager(trustAllCerts[0])
-                                .build()).negotiationType(TLS).build();
+                .negotiationType(PLAINTEXT).build();
     }
 }

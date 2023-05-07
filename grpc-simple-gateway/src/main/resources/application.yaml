@@ -7,7 +7,7 @@ server:
     key-store: classpath:keystore.p12
     key-store-password: password
     key-password: password
-    enabled: true
+    enabled: false
 spring:
   cloud:
     gateway:
